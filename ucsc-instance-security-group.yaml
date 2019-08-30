@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: UCSC CC Stack
+
+Parameters:
+  keyname:
+    Description: Key name for instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: Must be existing Keypair key name
+
+  sshlocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+Resources:
+  BasicInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      ImageId: 'ami-08fd8ae3806f09a08'
+      KeyName: !Ref keyname
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/sdf
+          Ebs:
+            VolumeSize: '8'
+            DeleteOnTermination: true
+      UserData:
+        'Fn::Base64': !Sub
+          - |
+            #!/bin/bash -xe
+            # create mount point directory
+            mkdir /mnt/xvdf
+            # create ext4 filesystem on new volume
+            mkfs -t ext4 /dev/xvdf
+            # add an entry to fstab to mount volume during boot
+            echo "/dev/xvdf       /mnt/xvdf   ext4    defaults,nofail 0       2" >> /etc/fstab
+            # mount the volume on current boot
+            mount -a
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: UCSC CloudFormation Security Group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: !Ref sshlocaton
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  InstanceId:
+    Description: Id of the new instance
+    Value: !Ref BasicInstance
+
+  IpAddress:
+    Description: Ip address of the instance
+    Value: !GetAtt
+      - BasicInstance
+      - PublicIp
