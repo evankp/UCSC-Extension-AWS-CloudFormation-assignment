@@ -42,6 +42,8 @@ Resources:
             # mount the volume on current boot
             mount -a
 
+            echo "Hello World" > /mnt/xvdf/hello-world.txt
+
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
