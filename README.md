@@ -1,4 +1,4 @@
-## UCSC Assignment - CloudFormation
+## UCSC Extension Assignment - CloudFormation
 Assignment to create a web server via a cloud formation stack
 
 ### Project Instructions
