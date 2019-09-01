@@ -5,8 +5,8 @@ Assignment to create a web server via a cloud formation stack
 1. Create an Amazon EC2 instance running an Ubuntu AMI with: 
 
 - A new EBS volume attached 
-- *TODO:* new Elastic IP address (public IP) 
--  SSH keypair.  
+- Elastic IP address (public IP) 
+- SSH keypair.  
 
     The Ubuntu AMI can be either 16.04 or 18.04 (64-bit).
 

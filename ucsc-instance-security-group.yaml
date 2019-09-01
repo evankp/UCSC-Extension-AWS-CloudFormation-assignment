@@ -52,6 +52,11 @@ Resources:
           ufw allow 'NFINX Full'
           systemctl restart nginx
 
+  ElasticIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      InstanceId: !Ref BasicInstance
+
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -72,7 +77,5 @@ Outputs:
     Value: !Ref BasicInstance
 
   IpAddress:
-    Description: Ip address of the instance
-    Value: !GetAtt
-      - BasicInstance
-      - PublicIp
+    Description: Ip address of the instance from the ElasticIP
+    Value: !Ref ElasticIP
