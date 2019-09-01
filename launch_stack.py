@@ -1,5 +1,4 @@
 import boto3
-import sys
 import argparse
 import yaml
 
