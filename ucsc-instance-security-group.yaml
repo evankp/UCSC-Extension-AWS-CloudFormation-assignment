@@ -32,17 +32,25 @@ Resources:
             DeleteOnTermination: true
       UserData:
         'Fn::Base64': !Sub |
-            #!/bin/bash -xe
-            # create mount point directory
-            mkdir /mnt/xvdf
-            # create ext4 filesystem on new volume
-            mkfs -t ext4 /dev/xvdf
-            # add an entry to fstab to mount volume during boot
-            echo "/dev/xvdf       /mnt/xvdf   ext4    defaults,nofail 0       2" >> /etc/fstab
-            # mount the volume on current boot
-            mount -a
+          #!/bin/bash -xe
+          # create mount point directory
+          mkdir /mnt/xvdf
+          # create ext4 filesystem on new volume
+          mkfs -t ext4 /dev/xvdf
+          # add an entry to fstab to mount volume during boot
+          echo "/dev/xvdf       /mnt/xvdf   ext4    defaults,nofail 0       2" >> /etc/fstab
+          # mount the volume on current boot
+          mount -a
 
-            echo "Hello World" > /mnt/xvdf/hello-world.txt
+          # Create file
+          echo "Hello World" > /mnt/xvdf/hello-world.txt
+
+          # Install web server Nginx
+          apt update
+          apt -y install nginx
+
+          ufw allow 'NFINX Full'
+          systemctl restart nginx
 
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'

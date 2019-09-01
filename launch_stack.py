@@ -32,7 +32,7 @@ if __name__ == '__main__':
         description='Create a stack with a web server. Requires a YAML file with params or entered via command line.'
     )
 
-    parser.add_argument('--file', '-f', help='Parameters for cloudformation.', type=argparse.FileType('r'))
+    parser.add_argument('--file', '-f', help='Parameters for cloudformation in YAML format.]', type=argparse.FileType('r'))
 
     parser.add_argument('key-name', nargs='?', help='SSH Key Name')
     parser.add_argument('ip-address', nargs='?', help='IP Address for ssh')
@@ -53,3 +53,5 @@ if __name__ == '__main__':
 
     print("IP Address of instance in stack: "
           f"{launch_stack(params['key_name'], params['ip_address'])['ip_address']}")
+
+    print('Please wait a moment for instance to finish initialization.')
