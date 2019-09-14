@@ -2,3 +2,5 @@
 *.png
 # Script default parameters
 cf-params.yaml
+# Zip file for submitting to class site
+ucsc-assignment-9.zip
